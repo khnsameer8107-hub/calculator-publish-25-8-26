@@ -1,0 +1,184 @@
+{
+  "app_name": "MIUI-Style Multi-Calculator",
+  "personality": "1 iOS-Native Clean (infused with MIUI roundedness)",
+  "personality_one_liner": "A highly functional, precision-focused utility that pairs stark backgrounds with perfectly rounded, tactile buttons and a signature orange accent.",
+  "color": {
+    "light": {
+      "surface": "#F4F5F7",
+      "onSurface": "#1C1C1E",
+      "surfaceSecondary": "#FFFFFF",
+      "onSurfaceSecondary": "#1C1C1E",
+      "surfaceTertiary": "#E5E5EA",
+      "onSurfaceTertiary": "#1C1C1E",
+      "surfaceInverse": "#1C1C1E",
+      "onSurfaceInverse": "#F4F5F7",
+      "brand": "#FF6A00",
+      "brandPrimary": "#FF6A00",
+      "onBrandPrimary": "#FFFFFF",
+      "brandSecondary": "#FFE1CC",
+      "onBrandSecondary": "#D95A00",
+      "brandTertiary": "#FFF0E5",
+      "onBrandTertiary": "#FF6A00",
+      "success": "#34C759",
+      "onSuccess": "#FFFFFF",
+      "warning": "#FF9F0A",
+      "onWarning": "#FFFFFF",
+      "error": "#FF3B30",
+      "onError": "#FFFFFF",
+      "info": "#007AFF",
+      "onInfo": "#FFFFFF",
+      "border": "#E5E5EA",
+      "borderStrong": "#C7C7CC",
+      "divider": "#E5E5EA"
+    },
+    "dark": {
+      "surface": "#000000",
+      "onSurface": "#F4F5F7",
+      "surfaceSecondary": "#1C1C1E",
+      "onSurfaceSecondary": "#F4F5F7",
+      "surfaceTertiary": "#2C2C2E",
+      "onSurfaceTertiary": "#F4F5F7",
+      "surfaceInverse": "#F4F5F7",
+      "onSurfaceInverse": "#000000",
+      "brand": "#FF6A00",
+      "brandPrimary": "#FF6A00",
+      "onBrandPrimary": "#FFFFFF",
+      "brandSecondary": "#4A2200",
+      "onBrandSecondary": "#FF8C33",
+      "brandTertiary": "#2A1300",
+      "onBrandTertiary": "#FF8C33",
+      "success": "#30D158",
+      "onSuccess": "#000000",
+      "warning": "#FF9F0A",
+      "onWarning": "#000000",
+      "error": "#FF453A",
+      "onError": "#000000",
+      "info": "#0A84FF",
+      "onInfo": "#000000",
+      "border": "#2C2C2E",
+      "borderStrong": "#3A3A3C",
+      "divider": "#2C2C2E"
+    }
+  },
+  "typography": {
+    "displayFontFamily": "Space Grotesk",
+    "textFontFamily": "Plus Jakarta Sans",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24,
+      "3xl": 32,
+      "4xl": 48,
+      "5xl": 64
+    }
+  },
+  "spacing": {
+    "rule": "Generous padding for tool cards and tight, exact grids for the calculator buttons. Use md or lg gaps between standard layout components.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": "1",
+  "navigation": "bottom_tabs",
+  "icon_set": "Ionicons",
+  "glassmorphism": {
+    "enabled": true,
+    "do's": [
+      "Use subtle glass over scrolling calculation history.",
+      "Use glass on bottom tab bar to feel floating."
+    ],
+    "dont's": [
+      "No glass on the calculator buttons themselves.",
+      "Do not blur standard tool cards."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "haptics": {
+    "calculator_button_press": "impactLight",
+    "equals_button_press": "impactMedium",
+    "tool_card_tap": "selection",
+    "tab_switch": "selection",
+    "theme_toggle": "impactLight"
+  },
+  "screens": [
+    {
+      "name": "Home",
+      "purpose": "A dashboard indexing Favorites, Recently Used tools, and Global Search.",
+      "states": {
+        "loading": "Centered spinner",
+        "empty": "No favorites yet? Tap the star icon on any tool to pin it here.",
+        "error": "Failed to load dashboard."
+      },
+      "layout": "Sticky search bar at top. 'Favorites' horizontal scrolling or grid. 'Recently Used' section below. Use surfaceSecondary cards with lg radius. Tinted icons inside brandTertiary rounded squares for each tool card."
+    },
+    {
+      "name": "Calculator",
+      "purpose": "Primary standard and scientific calculation interface.",
+      "states": {
+        "loading": "Skeleton of grid layout",
+        "empty": "N/A - Calculator is always active.",
+        "error": "Error in calculation displayed in the result display area."
+      },
+      "layout": "Top half is a massive display (flex-grow) showing current equation and result, using Space Grotesk. Bottom half is a tightly spaced grid (gap: md). Numeric buttons use surfaceSecondary (pill or lg radius). Operator buttons use brandTertiary (light orange) with onBrandTertiary text. Equals button uses brandPrimary (solid orange)."
+    },
+    {
+      "name": "Finance",
+      "purpose": "List/Grid of finance tools (GST, Currency, SIP, EMI).",
+      "states": {
+        "loading": "Loading tool configurations",
+        "empty": "No finance tools available.",
+        "error": "Failed to load exchange rates for Currency Converter."
+      },
+      "layout": "Grid of surfaceSecondary cards. Each card has a leading brandTertiary tinted icon. Clicking opens a sub-screen. For sub-screens, forms are single-column with lg spacing and a sticky calculate CTA at the bottom."
+    },
+    {
+      "name": "Converters",
+      "purpose": "List of unit converters (Age, BMI, Length, Mass, etc.).",
+      "states": {
+        "loading": "Loading conversion tools",
+        "empty": "No converters available.",
+        "error": "Failed to load converter module."
+      },
+      "layout": "A 2-column grid layout of cards. Each has an icon and text. Clean and readable. Use Ionicons filled for tools."
+    }
+  ],
+  "images": {
+    "home_banner": {
+      "url": "https://images.unsplash.com/photo-1707324148764-99647364afa3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGNsZWFuJTIwbWluaW1hbGlzdCUyMGdlb21ldHJpYyUyMHNoYXBlcyUyMG9yYW5nZXxlbnwwfHx8fDE3ODY5MzQ1MzR8MA&ixlib=rb-4.1.0&q=85",
+      "dark": "https://images.pexels.com/photos/38485602/pexels-photo-38485602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "alt": "Abstract minimal geometric orange banner"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow the user's specific request for a 'MIUI-inspired' look. This means perfectly rounded keys (lg or pill) for the calculator, a distinct orange accent (#FF6A00), and crisp high-contrast cards.",
+    "Use 'Space Grotesk' exclusively for the massive numbers in the calculator display to ensure monospaced, highly readable math logic.",
+    "Calculator Key Coloring: Numbers = surfaceSecondary. Clear/Secondary actions = surfaceTertiary. Math Operators (+, -, x, /) = brandTertiary. Equals (=) = brandPrimary.",
+    "Finance and Converter screens should use 2-column or list layouts. Every tool must have an icon enclosed in a brandTertiary tinted background square.",
+    "Bottom Tab Navigation must feel floating and minimal. Use glassmorphism on the tab bar if possible.",
+    "Enable touch haptics rigorously on calculator buttons—this is a utility app, physical response makes it feel premium.",
+    "The exception to the 'no orange' rule was applied here explicitly because the prompt mandates 'Signature MIUI orange accent color'. Do not change it to dark-gray."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "summary": "Frontend-only Expo/React Native web preview testing for MIUI-inspired multi-purpose CalcHub calculator app. Ran comprehensive UI validation across all major screens (home, standard/scientific calculator, GST, SIP, EMI, currency, converters, temperature, discount, BMI, numeral, age, date, search, settings). All calculations numerically correct: 7x8+9=65, (2+3)*4=20, 5/0=Cannot divide by zero, sin(30) DEG=0.5, 5!=120, 2^10=1024, log(100)=2, pi=3.14159265, GST 1000@18%=1180/GST180, discount 2000@20%=1600/save400, temp 100C=212F, BMI 70kg/175cm=~22.86, numeral dec 10=1010/12/A. Favorites persist across reload. Theme switching works. Search returns matching tools. No React Native red screen errors. No deprecated Expo packages (expo-av / expo-barcode-scanner / expo-background-fetch) used. Only cosmetic console warnings (pointerEvents deprecated prop, shadow* props, useNativeDriver web fallback) — non-blocking.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Home", "issues": ["Home 'search bar' is a Pressable (navigates to /search) rather than an inline TextInput; visually looks like an input but has no data-testid=search-input on the home screen. This is acceptable UX but the review request implied an input on home. The actual /search screen has the working search input."]}
+    ],
+    "react_native_issues": [
+      {"component": "props.pointerEvents", "issue": "React Native web console warning: 'props.pointerEvents is deprecated. Use style.pointerEvents'. Likely emitted by a library/react-native-web version; low priority."},
+      {"component": "shadow* style props", "issue": "'shadow*' style props are deprecated. Use 'boxShadow'. Emitted on web only; low priority."}
+    ]
+  },
+  "test_report_links": [],
+  "action_items": [
+    "(Optional) Add a data-testid=search-input to the home dashboard search Pressable or convert it to an actual TextInput per the review request wording.",
+    "(Optional) Migrate any lingering shadow* / pointerEvents usages to boxShadow / style.pointerEvents for react-native-web to silence deprecation warnings."
+  ],
+  "critical_code_review_comments": [
+    "Safe expression parser (src/utils/calc/expression.ts) properly avoids eval/Function, uses tokenizer + recursive-descent parser with correct precedence, right-associative ^, factorial with overflow guard, DEG/RAD handling, divide-by-zero and NaN checks.",
+    "AsyncStorage-backed persistence works for theme, favorites, and calc mode/angle. Verified via reload (Favorites section persists).",
+    "All tools have testIDs on interactive elements. Modal-based selectors documented in the review request."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "~98%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "App is fully offline (no backend). Base URL: https://calc-hub-269.preview.emergentagent.com. Mobile viewport 390x844. Key testIDs: tab-*, mode-standard/scientific, btn-* (calculator), gst-amount/gst-rate/gst-mode-add/gst-mode-remove, sip-amount/sip-rate/sip-duration/sip-type, emi-amount/emi-rate/emi-duration, currency-amount, unit-value, temp-value, discount-price/discount-percent/discount-tax, bmi-weight/bmi-height, numeral-input, age-dob-day/month/year, favorite-toggle-<toolId>, theme-light/dark/system. History items use testID history-item-<id> (empty when no prior calcs in same browser session).",
+  "rca_of_issue": "No blocking issues found."
+}

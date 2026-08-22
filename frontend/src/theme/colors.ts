@@ -1,0 +1,89 @@
+export type ColorPalette = {
+  surface: string;
+  onSurface: string;
+  surfaceSecondary: string;
+  onSurfaceSecondary: string;
+  surfaceTertiary: string;
+  onSurfaceTertiary: string;
+  surfaceInverse: string;
+  onSurfaceInverse: string;
+  brand: string;
+  brandPrimary: string;
+  onBrandPrimary: string;
+  brandSecondary: string;
+  onBrandSecondary: string;
+  brandTertiary: string;
+  onBrandTertiary: string;
+  success: string;
+  onSuccess: string;
+  warning: string;
+  onWarning: string;
+  error: string;
+  onError: string;
+  info: string;
+  onInfo: string;
+  border: string;
+  borderStrong: string;
+  divider: string;
+  muted: string;
+};
+
+export const lightColors: ColorPalette = {
+  surface: "#F4F5F7",
+  onSurface: "#1C1C1E",
+  surfaceSecondary: "#FFFFFF",
+  onSurfaceSecondary: "#1C1C1E",
+  surfaceTertiary: "#E5E5EA",
+  onSurfaceTertiary: "#1C1C1E",
+  surfaceInverse: "#1C1C1E",
+  onSurfaceInverse: "#F4F5F7",
+  brand: "#FF6A00",
+  brandPrimary: "#FF6A00",
+  onBrandPrimary: "#FFFFFF",
+  brandSecondary: "#FFE1CC",
+  onBrandSecondary: "#D95A00",
+  brandTertiary: "#FFF0E5",
+  onBrandTertiary: "#FF6A00",
+  success: "#34C759",
+  onSuccess: "#FFFFFF",
+  warning: "#FF9F0A",
+  onWarning: "#FFFFFF",
+  error: "#FF3B30",
+  onError: "#FFFFFF",
+  info: "#007AFF",
+  onInfo: "#FFFFFF",
+  border: "#E5E5EA",
+  borderStrong: "#C7C7CC",
+  divider: "#E5E5EA",
+  muted: "#8E8E93",
+};
+
+export const darkColors: ColorPalette = {
+  surface: "#000000",
+  onSurface: "#F4F5F7",
+  surfaceSecondary: "#1C1C1E",
+  onSurfaceSecondary: "#F4F5F7",
+  surfaceTertiary: "#2C2C2E",
+  onSurfaceTertiary: "#F4F5F7",
+  surfaceInverse: "#F4F5F7",
+  onSurfaceInverse: "#000000",
+  brand: "#FF6A00",
+  brandPrimary: "#FF6A00",
+  onBrandPrimary: "#FFFFFF",
+  brandSecondary: "#4A2200",
+  onBrandSecondary: "#FF8C33",
+  brandTertiary: "#2A1300",
+  onBrandTertiary: "#FF8C33",
+  success: "#30D158",
+  onSuccess: "#000000",
+  warning: "#FF9F0A",
+  onWarning: "#000000",
+  error: "#FF453A",
+  onError: "#000000",
+  info: "#0A84FF",
+  onInfo: "#000000",
+  border: "#2C2C2E",
+  borderStrong: "#3A3A3C",
+  divider: "#2C2C2E",
+  muted: "#8E8E93",
+};
