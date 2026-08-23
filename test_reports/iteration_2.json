@@ -1,0 +1,34 @@
+{
+  "summary": "Retest after fixes for scientific calculator display, error handling, Privacy Policy, and Terms & Conditions. ALL primary fixes verified working. Scientific mode now displays BOTH the expression (calc-expression) AND the result (calc-result) clearly above the keypad — the display no longer clips because the keypad is sized responsively via useWindowDimensions and the result font is mode-aware. Verified sin(30)=0.5, cos(60)=0.5, tan(45)=1, log(100)=2, ln(e)=1, 5!=120, 2^10=1024, √(9)=3, 7²=49, π=3.14159265, 2nd toggle switches sin→sin⁻¹, DEG↔RAD toggle works, long expressions scroll horizontally. Standard: 7×8+9=65, (2+3)×4=20, 1..5 guarded → 1.5, 5÷0 → 'Cannot divide by zero', 9^99 → 2.951267e+94, 200! → 'Number too large', invalid expression (+ ×) → 'Invalid expression'. After every error the calculator recovers via AC and next expression works (1+1=2). Rapid button presses (15× 9) and repeated equals (4+5===) do NOT misbehave. Rapid mode toggle Std↔Sci remains stable. copy-result and open-history work; no crashes. Legal pages: Home → open-settings → open-privacy loads privacy-policy-scroll (scrollHeight 1564, clientHeight 779) with all 11 sections; open-terms loads terms-scroll (scrollHeight 1416); both are scrollable via wheel; back button returns to Settings and then Home. Deprecated packages: NONE detected (no expo-av, expo-barcode-scanner, expo-background-fetch). Only cosmetic RN-web console warnings (pointerEvents, shadow*, useNativeDriver) — non-blocking, already noted in iteration_1.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Legal / Privacy & Terms", "issues": ["Both Privacy Policy and Terms & Conditions bodies still contain the placeholder line 'support@example.com (replace with your support email before publishing)'. Since the goal is a Google Play release, replace this with the real support email before publishing. Files: /app/frontend/app/legal/privacy.tsx:66 and /app/frontend/app/legal/terms.tsx:61."]}
+    ],
+    "react_native_issues": [
+      {"component": "props.pointerEvents", "issue": "react-native-web console warning 'props.pointerEvents is deprecated. Use style.pointerEvents.' Cosmetic on web preview only; safe to ignore for Play release but worth silencing. No specific source line — appears to originate from library code."},
+      {"component": "shadow* style props", "issue": "react-native-web console warning '\"shadow*\" style props are deprecated. Use \"boxShadow\".' Cosmetic on web preview only."},
+      {"component": "useNativeDriver on web", "issue": "'Animated: `useNativeDriver` is not supported' warning surfaces on web preview because RCTAnimation is native-only. Harmless on Android/iOS build; falls back to JS on web."}
+    ]
+  },
+  "test_report_links": ["/app/test_reports/iteration_1.json", "/app/test_reports/iteration_2.json"],
+  "action_items": [
+    "Before Google Play release: replace the placeholder 'support@example.com (replace with your support email before publishing)' in /app/frontend/app/legal/privacy.tsx and /app/frontend/app/legal/terms.tsx with the real support contact.",
+    "(Optional / low priority) Silence deprecated RN-web warnings by migrating any remaining `pointerEvents` prop to `style.pointerEvents` and `shadow*` styles to `boxShadow` in the codebase."
+  ],
+  "critical_code_review_comments": [
+    "Scientific display fix is well-implemented: /app/frontend/app/(tabs)/calculator.tsx uses useWindowDimensions to compute btnH dynamically, reserves displayMin (108 sci / 150 std) and shrinks resultFont to fontSize['4xl'] in scientific mode so both expression and result always fit above the 9-row scientific keypad.",
+    "Safe expression evaluator (/app/frontend/src/utils/calc/expression.ts) uses tokenizer + recursive-descent parser (no eval/Function), correctly handles precedence, right-associative ^, unary +/-, postfix ! and %, DEG/RAD, divide-by-zero, factorial overflow (n>170 → Infinity → 'Number too large' via isFinite check in evaluate()), NaN → 'Invalid expression'.",
+    "ErrorBoundary is wired in _layout.tsx and evaluate() only throws CalcError — the equals handler catches it and never lets the app white-screen.",
+    "LegalScreen (/app/frontend/src/components/LegalScreen.tsx) correctly attaches testID to the ScrollView, uses SafeAreaInsets bottom padding, and lists sections as proper Text-wrapped nodes."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (no backend)", "frontend": "100% of requested flows verified"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Base URL: https://calc-hub-269.preview.emergentagent.com. Fully offline app, no backend. Mobile viewport 390x844. Home tab testID is 'tab-index' (NOT tab-home). header-back-button matches multiple DOM nodes because expo-router keeps stacked screens mounted — iterate query_selector_all and click the first is_visible() one, or use .first if only one is visible. To assert scrolling on privacy-policy-scroll / terms-scroll, use page.mouse.wheel(0, N) rather than element.scrollTo() (the RN-web ScrollView wrapper's scrollTop is programmatically read-only through scrollTo in some cases). Placeholder support email in legal pages should be replaced before Play release.",
+  "rca_of_issue": "Original bug (scientific display clipping) RCA: In scientific mode the 9-row keypad plus its 3 function rows squeezed the flex-based display container to near-zero height, hiding calc-expression/calc-result above the keypad. Fix: introduced useWindowDimensions-based btnH clamped to [44, 72]px, reduced rowGap and displayMin, and dropped resultFont from 5xl to 4xl in scientific mode — this guarantees at least 108px of display height plus the ScrollViews above the keypad. Reproduced OK before fix would show missing bottom line; now verified visible with sin(30)=0.5 and long expression '123+123+...' showing '739' correctly."
+}

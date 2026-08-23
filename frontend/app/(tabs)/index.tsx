@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useMemo } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -11,9 +11,6 @@ import { TOOLS, TOOLS_BY_ID } from "@/src/data/tools";
 import { useAppData } from "@/src/store/AppDataContext";
 import { useTheme } from "@/src/theme/ThemeContext";
 import { fontSize, radius, shadow, spacing } from "@/src/theme/tokens";
-
-const BANNER_LIGHT =
-  "https://images.unsplash.com/photo-1707324148764-99647364afa3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGNsZWFuJTIwbWluaW1hbGlzdCUyMGdlb21ldHJpYyUyMHNoYXBlcyUyMG9yYW5nZXxlbnwwfHx8fDE3ODY5MzQ1MzR8MA&ixlib=rb-4.1.0&q=85";
 
 export default function HomeScreen() {
   const { colors } = useTheme();
@@ -61,16 +58,19 @@ export default function HomeScreen() {
           </Text>
         </Pressable>
 
-        {/* Banner + primary CTAs */}
+        {/* Banner */}
         <View style={styles.section}>
-          <View style={[styles.banner, shadow.card]}>
-            <Image source={{ uri: BANNER_LIGHT }} style={StyleSheet.absoluteFill} contentFit="cover" transition={200} />
-            <View style={styles.bannerOverlay} />
+          <LinearGradient
+            colors={["#FF8C33", "#FF6A00", "#D95A00"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={[styles.banner, shadow.card]}
+          >
             <View style={styles.bannerContent}>
               <Text style={styles.bannerTitle}>Fast, private & offline</Text>
               <Text style={styles.bannerSub}>18 tools · works with no internet</Text>
             </View>
-          </View>
+          </LinearGradient>
         </View>
 
         {/* Quick calculators */}
@@ -213,10 +213,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     overflow: "hidden",
     justifyContent: "flex-end",
-  },
-  bannerOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.32)",
   },
   bannerContent: { padding: spacing.lg },
   bannerTitle: { color: "#fff", fontSize: fontSize.xl, fontWeight: "900" },

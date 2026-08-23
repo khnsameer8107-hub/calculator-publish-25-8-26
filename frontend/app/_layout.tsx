@@ -8,6 +8,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { useIconFonts } from "@/src/hooks/use-icon-fonts";
+import { ErrorBoundary } from "@/src/components/ErrorBoundary";
 import { ToastProvider } from "@/src/components/Toast";
 import { AppDataProvider } from "@/src/store/AppDataContext";
 import { ThemeProvider, useTheme } from "@/src/theme/ThemeContext";
@@ -27,7 +28,9 @@ function ThemedApp() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
       <StatusBar style={scheme === "dark" ? "light" : "dark"} />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.surface } }} />
+      <ErrorBoundary>
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.surface } }} />
+      </ErrorBoundary>
     </View>
   );
 }

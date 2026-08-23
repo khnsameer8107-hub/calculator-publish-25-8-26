@@ -32,6 +32,7 @@ export default function UnitConverterScreen() {
     setFrom(category.units[0].key);
     setTo(category.units[1].key);
     setValue("1");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryId]);
 
   const options = category.units.map((u) => ({ key: u.key, label: u.label, symbol: u.symbol }));

@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CalculatorButton } from "@/src/components/CalculatorButton";
@@ -147,7 +147,7 @@ export default function CalculatorScreen() {
   }, [justEvaluated]);
 
   const equals = useCallback(() => {
-    if (!expr) return;
+    if (!expr || justEvaluated) return;
     try {
       const res = evaluate(expr, angle);
       const formatted = formatNumber(res);
@@ -161,7 +161,7 @@ export default function CalculatorScreen() {
       setError(e instanceof CalcError ? e.message : "Invalid expression");
       setJustEvaluated(false);
     }
-  }, [expr, angle, addHistory]);
+  }, [expr, angle, addHistory, justEvaluated]);
 
   const copyResult = useCallback(() => {
     const value = justEvaluated ? result : preview !== null ? formatNumber(preview!) : expr;
@@ -198,6 +198,20 @@ export default function CalculatorScreen() {
     scrollRef.current?.scrollToEnd({ animated: true });
     bottomScrollRef.current?.scrollToEnd({ animated: true });
   }, [topLine, bottomLine]);
+
+  const { height: winH } = useWindowDimensions();
+  const numRows = mode === "scientific" ? 9 : 6;
+  const rowGap = mode === "scientific" ? spacing.sm : spacing.md;
+  const displayMin = mode === "scientific" ? 108 : 150;
+  const bottomReserve = insets.bottom + 96 + spacing.md;
+  const avail = winH - 52 - displayMin - bottomReserve;
+  const btnH = Math.max(44, Math.min(72, (avail - rowGap * (numRows - 1)) / numRows));
+  const rowStyle = [styles.row, { height: btnH, gap: rowGap }];
+  const resultFont = error
+    ? fontSize["2xl"]
+    : mode === "scientific"
+      ? fontSize["4xl"]
+      : fontSize["5xl"];
 
   return (
     <Screen>
@@ -244,7 +258,7 @@ export default function CalculatorScreen() {
       </View>
 
       {/* Display */}
-      <View style={styles.display}>
+      <View style={[styles.display, { minHeight: displayMin }]}>
         <ScrollView
           ref={scrollRef}
           horizontal
@@ -266,7 +280,7 @@ export default function CalculatorScreen() {
               styles.resultText,
               {
                 color: error ? colors.error : justEvaluated ? colors.onSurface : colors.muted,
-                fontSize: error ? fontSize["2xl"] : fontSize["5xl"],
+                fontSize: resultFont,
               },
             ]}
             testID="calc-result"
@@ -277,24 +291,24 @@ export default function CalculatorScreen() {
       </View>
 
       {/* Keypad */}
-      <View style={[styles.keypad, { paddingBottom: insets.bottom + 96 }]}>
+      <View style={[styles.keypad, { paddingBottom: insets.bottom + 96, gap: rowGap }]}>
         {mode === "scientific" ? (
-          <View style={styles.sciBlock}>
-            <View style={styles.row}>
+          <View style={[styles.sciBlock, { gap: rowGap }]}>
+            <View style={rowStyle}>
               <CalculatorButton testID="btn-2nd" label="2nd" variant={second ? "operator" : "function"} small onPress={() => setSecond((s) => !s)} />
               <CalculatorButton testID="btn-angle" label={angle} variant="function" small onPress={toggleAngle} />
               <CalculatorButton testID="btn-sin" label={second ? "sin⁻¹" : "sin"} variant="function" small onPress={() => press(second ? "asin(" : "sin(", true)} />
               <CalculatorButton testID="btn-cos" label={second ? "cos⁻¹" : "cos"} variant="function" small onPress={() => press(second ? "acos(" : "cos(", true)} />
               <CalculatorButton testID="btn-tan" label={second ? "tan⁻¹" : "tan"} variant="function" small onPress={() => press(second ? "atan(" : "tan(", true)} />
             </View>
-            <View style={styles.row}>
+            <View style={rowStyle}>
               <CalculatorButton testID="btn-pow" label="xʸ" variant="function" small onPress={() => press("^", false)} />
               <CalculatorButton testID="btn-square" label={second ? "x³" : "x²"} variant="function" small onPress={() => press(second ? "^3" : "^2", false)} />
               <CalculatorButton testID="btn-root" label={second ? "∛" : "√"} variant="function" small onPress={() => press(second ? "∛(" : "√(", true)} />
               <CalculatorButton testID="btn-log" label="log" variant="function" small onPress={() => press("log(", true)} />
               <CalculatorButton testID="btn-ln" label="ln" variant="function" small onPress={() => press("ln(", true)} />
             </View>
-            <View style={styles.row}>
+            <View style={rowStyle}>
               <CalculatorButton testID="btn-recip" label="1/x" variant="function" small onPress={() => press("^(-1)", false)} />
               <CalculatorButton testID="btn-fact" label="x!" variant="function" small onPress={() => press("!", false)} />
               <CalculatorButton testID="btn-pi" label="π" variant="function" small onPress={() => press("π", true)} />
@@ -304,37 +318,37 @@ export default function CalculatorScreen() {
           </View>
         ) : null}
 
-        <View style={styles.row}>
+        <View style={rowStyle}>
           <CalculatorButton testID="btn-clear" label="AC" variant="action" onPress={clearAll} />
           <CalculatorButton testID="btn-open-paren" label="(" variant="action" onPress={() => press("(", true)} />
           <CalculatorButton testID="btn-close-paren" label=")" variant="action" onPress={() => press(")", false)} />
           <CalculatorButton testID="btn-backspace" icon="backspace-outline" variant="action" onPress={backspace} />
         </View>
-        <View style={styles.row}>
+        <View style={rowStyle}>
           <CalculatorButton testID="btn-7" label="7" onPress={() => press("7", true)} />
           <CalculatorButton testID="btn-8" label="8" onPress={() => press("8", true)} />
           <CalculatorButton testID="btn-9" label="9" onPress={() => press("9", true)} />
           <CalculatorButton testID="btn-divide" label="÷" variant="operator" onPress={() => press("÷", false)} />
         </View>
-        <View style={styles.row}>
+        <View style={rowStyle}>
           <CalculatorButton testID="btn-4" label="4" onPress={() => press("4", true)} />
           <CalculatorButton testID="btn-5" label="5" onPress={() => press("5", true)} />
           <CalculatorButton testID="btn-6" label="6" onPress={() => press("6", true)} />
           <CalculatorButton testID="btn-multiply" label="×" variant="operator" onPress={() => press("×", false)} />
         </View>
-        <View style={styles.row}>
+        <View style={rowStyle}>
           <CalculatorButton testID="btn-1" label="1" onPress={() => press("1", true)} />
           <CalculatorButton testID="btn-2" label="2" onPress={() => press("2", true)} />
           <CalculatorButton testID="btn-3" label="3" onPress={() => press("3", true)} />
           <CalculatorButton testID="btn-subtract" label="−" variant="operator" onPress={() => press("-", false)} />
         </View>
-        <View style={styles.row}>
+        <View style={rowStyle}>
           <CalculatorButton testID="btn-negate" label="+/−" variant="action" onPress={toggleSign} />
           <CalculatorButton testID="btn-0" label="0" onPress={() => press("0", true)} />
           <CalculatorButton testID="btn-decimal" label="." onPress={() => press(".", true)} />
           <CalculatorButton testID="btn-add" label="+" variant="operator" onPress={() => press("+", false)} />
         </View>
-        <View style={styles.row}>
+        <View style={rowStyle}>
           <CalculatorButton testID="btn-percent" label="%" variant="action" flex={1} onPress={() => press("%", false)} />
           <CalculatorButton testID="btn-equals" label="=" variant="equals" flex={3} onPress={equals} />
         </View>

@@ -93,11 +93,12 @@ export function CalculatorButton({
 
 const styles = StyleSheet.create({
   btn: {
+    flex: 1,
     borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",
-    minHeight: 60,
-    paddingVertical: 8,
+    minHeight: 44,
+    paddingVertical: 4,
   },
   label: { fontWeight: "700" },
 });

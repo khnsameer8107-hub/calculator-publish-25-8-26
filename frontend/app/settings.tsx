@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { useRouter } from "expo-router";
 import React from "react";
 import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -20,6 +21,7 @@ export default function SettingsScreen() {
   const { colors, mode, setMode } = useTheme();
   const insets = useSafeAreaInsets();
   const toast = useToast();
+  const router = useRouter();
   const { clearHistory, clearRecents } = useAppData();
 
   return (
@@ -90,6 +92,31 @@ export default function SettingsScreen() {
             >
               <Ionicons name="refresh-outline" size={22} color={colors.onSurface} />
               <Text style={[styles.dataLabel, { color: colors.onSurface }]}>Clear recently used tools</Text>
+              <Ionicons name="chevron-forward" size={18} color={colors.muted} />
+            </Pressable>
+          </Card>
+        </View>
+
+        <View>
+          <SectionTitle title="Legal" />
+          <Card style={{ gap: spacing.md }}>
+            <Pressable
+              testID="open-privacy"
+              onPress={() => router.push("/legal/privacy")}
+              style={styles.dataRow}
+            >
+              <Ionicons name="shield-checkmark-outline" size={22} color={colors.onSurface} />
+              <Text style={[styles.dataLabel, { color: colors.onSurface }]}>Privacy Policy</Text>
+              <Ionicons name="chevron-forward" size={18} color={colors.muted} />
+            </Pressable>
+            <View style={[styles.divider, { backgroundColor: colors.divider }]} />
+            <Pressable
+              testID="open-terms"
+              onPress={() => router.push("/legal/terms")}
+              style={styles.dataRow}
+            >
+              <Ionicons name="document-text-outline" size={22} color={colors.onSurface} />
+              <Text style={[styles.dataLabel, { color: colors.onSurface }]}>Terms & Conditions</Text>
               <Ionicons name="chevron-forward" size={18} color={colors.muted} />
             </Pressable>
           </Card>

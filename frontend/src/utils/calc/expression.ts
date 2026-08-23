@@ -309,7 +309,7 @@ export function evaluate(raw: string, angle: AngleMode = "DEG"): number {
   const parser = new Parser(tokens, angle);
   const result = parser.parse();
   if (Number.isNaN(result)) throw new CalcError("Invalid expression");
-  if (!isFinite(result)) throw new CalcError("Cannot divide by zero");
+  if (!isFinite(result)) throw new CalcError("Number too large");
   return roundSmart(result);
 }
 
