@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
+import Constants, { ExecutionEnvironment } from "expo-constants";
 import { useEffect } from "react";
 import { LogBox, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -17,11 +18,18 @@ import { ThemeProvider, useTheme } from "@/src/theme/ThemeContext";
 // and agent works as expected.
 LogBox.ignoreAllLogs(true);
 
-// Keep the native splash visible from cold start until icon fonts register.
-// Required because @expo/vector-icons' componentDidMount fallback fires
-// Font.loadAsync against a broken vendor path if any <Icon> mounts before
-// the family is registered — which throws on Android Expo Go.
-SplashScreen.preventAutoHideAsync();
+// Only Expo Go (dev) has to fetch @expo/vector-icons .ttf files from a CDN;
+// native/production builds and web register them synchronously.
+const IS_EXPO_GO = Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+
+// In production/native builds (and web) we DO NOT hold the native splash at
+// all — the Home screen paints on the very first frame with no artificial
+// delay, so tapping the app icon opens Home directly. We keep the brief
+// splash hold ONLY inside Expo Go, where an <Icon> mounting before its font
+// family registers would throw on Android (dev-only safeguard).
+if (IS_EXPO_GO) {
+  SplashScreen.preventAutoHideAsync();
+}
 
 function ThemedApp() {
   const { colors, scheme } = useTheme();
@@ -39,14 +47,15 @@ export default function RootLayout() {
   const [loaded, error] = useIconFonts();
 
   useEffect(() => {
-    if (loaded || error) {
+    // Only relevant in Expo Go, where we held the splash above.
+    if (IS_EXPO_GO && (loaded || error)) {
       SplashScreen.hideAsync();
     }
   }, [loaded, error]);
 
-  // If the CDN is unreachable we fall through on error rather than wedging
-  // the app — icons will tofu, but the app still boots.
-  if (!loaded && !error) return null;
+  // Native/production builds and web render Home immediately — no gate, no
+  // loading screen. Only Expo Go briefly waits for CDN icon fonts.
+  if (IS_EXPO_GO && !loaded && !error) return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
