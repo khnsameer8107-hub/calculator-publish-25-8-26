@@ -373,6 +373,8 @@ test_plan:
 agent_communication:
     - agent: "testing"
       message: "Comprehensive testing completed on CalcHub Expo/React Native app. All 18 core features tested and verified working. No blocking issues found. App is fully functional, truly offline, and handles all user interactions without crashes. Minor React Native Web console warnings present (deprecated props) but these are cosmetic and do not affect functionality. App passes all requirements from review request."
+    - agent: "testing"
+      message: "REGRESSION TEST COMPLETED (2026-08-23): Verified packager restart successful. Metro bundler running on port 3000, app loads without 'Packager is not running' error. Home screen renders correctly with CalcHub header, search bar, 'Fast, private & offline' banner, and all tool cards (Calculator, Scientific, History, Finance, Converters). Calculator screen accessible with all buttons visible (0-9, AC, +, -, ×, ÷, =). No red error overlays, no console errors, navigation working. All regression checks PASSED."
 ## user_problem_statement: "Run the CalcHub mobile app completely, verify it launches and works correctly, and confirm it is 100% offline (no backend/API/cloud). Check all main screens and core features, fix any errors."
 
 ## frontend:
