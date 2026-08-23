@@ -63,7 +63,8 @@ export default function PrivacyScreen() {
         {
           heading: "Contact",
           body:
-            "Questions about privacy? Contact us at: support@example.com (replace with your support email before publishing).",
+            "Questions about privacy? We're happy to help. You can reach our support team any time using the email below.",
+          email: "jarvisai9077@gmail.com",
         },
       ]}
     />

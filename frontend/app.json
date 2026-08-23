@@ -10,15 +10,15 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.emergent.calchub.hadwon"
+      "bundleIdentifier": "com.calchub.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#000000"
+        "backgroundColor": "#FF6A00"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.emergent.calchub.hadwon"
+      "package": "com.calchub.app"
     },
     "web": {
       "bundler": "metro",

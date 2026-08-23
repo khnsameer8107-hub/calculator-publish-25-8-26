@@ -58,7 +58,8 @@ export default function TermsScreen() {
         {
           heading: "Contact",
           body:
-            "For questions about these Terms, contact us at: support@example.com (replace with your support email before publishing).",
+            "For questions about these Terms, please reach out to our support team using the email below.",
+          email: "jarvisai9077@gmail.com",
         },
       ]}
     />
